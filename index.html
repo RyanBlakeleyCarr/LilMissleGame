@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Missile Command</title>
+    <style>
+        body {
+            margin: 0;
+            overflow: hidden;
+            background: #000;
+            background-image: radial-gradient(#111 1px, transparent 1px);
+            background-size: 50px 50px;
+        }
+        #game {
+            width: 100vw;
+            height: 100vh;
+            position: relative;
+        }
+        #launcher {
+            width: 60px;
+            height: 40px;
+            position: absolute;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            clip-path: polygon(0% 100%, 20% 0%, 80% 0%, 100% 100%, 50% 80%);
+            background: linear-gradient(to bottom, #44ff44, #2a9d2a);
+            box-shadow: 0 0 10px #44ff44;
+        }
+        .missile {
+            width: 4px;
+            height: 15px;
+            background: #ff4444;
+            position: absolute;
+            transform: translateX(-50%);
+            box-shadow: 0 0 10px #ff4444;
+        }
+        .missile::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 6px;
+            height: 12px;
+            background: linear-gradient(to bottom, #ff4444, transparent);
+        }
+        .target {
+            width: 20px;
+            height: 20px;
+            background: #4444ff;
+            position: absolute;
+            border-radius: 50%;
+            transform: translateX(-50%);
+            box-shadow: 0 0 10px #4444ff;
+        }
+        .explosion {
+            position: absolute;
+            width: 40px;
+            height: 40px;
+            transform: translate(-50%, -50%);
+            animation: explode 0.5s ease-out forwards;
+        }
+        @keyframes explode {
+            0% {
+                width: 0px;
+                height: 0px;
+                background: white;
+                opacity: 1;
+            }
+            50% {
+                width: 40px;
+                height: 40px;
+                background: #ff8844;
+                opacity: 0.8;
+            }
+            100% {
+                width: 60px;
+                height: 60px;
+                background: #ff4400;
+                opacity: 0;
+            }
+        }
+        #score {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            color: white;
+            font-family: Arial, sans-serif;
+            font-size: 24px;
+            text-shadow: 0 0 10px #44ff44;
+        }
+    </style>
+</head>
+<body>
+    <div id="game">
+        <div id="score">Score: 0</div>
+        <div id="launcher"></div>
+    </div>
+    <script src="game.js"></script>
+</body>
+</html> 
