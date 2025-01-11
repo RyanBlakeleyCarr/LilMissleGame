@@ -15,6 +15,11 @@ let keys = {
     ArrowUp: false
 };
 
+let isGameOver = false;
+const gameOverScreen = document.getElementById('gameOver');
+const finalScoreDisplay = document.getElementById('finalScore');
+const restartButton = document.getElementById('restartButton');
+
 // Event listeners
 document.addEventListener('keydown', (e) => {
     if (keys.hasOwnProperty(e.key)) {
@@ -70,7 +75,38 @@ function createExplosion(x, y) {
     }, 500);
 }
 
+function gameOver() {
+    isGameOver = true;
+    gameOverScreen.style.display = 'block';
+    finalScoreDisplay.textContent = `Final Score: ${score}`;
+}
+
+function resetGame() {
+    isGameOver = false;
+    score = 0;
+    scoreElement.textContent = 'Score: 0';
+    gameOverScreen.style.display = 'none';
+    
+    // Clear all existing missiles and targets
+    missiles.forEach(missile => game.removeChild(missile.element));
+    targets.forEach(target => game.removeChild(target.element));
+    missiles = [];
+    targets = [];
+    
+    // Reset launcher position
+    launcherX = window.innerWidth / 2;
+    launcher.style.left = launcherX + 'px';
+
+    // Restart the game loop
+    requestAnimationFrame(updateGame);
+}
+
+// Add event listener for restart button
+restartButton.addEventListener('click', resetGame);
+
 function updateGame() {
+    if (isGameOver) return;  // Stop game updates if game is over
+    
     // Move launcher
     if (keys.ArrowLeft) {
         launcherX = Math.max(20, launcherX - launcherSpeed);
@@ -103,6 +139,15 @@ function updateGame() {
     targets.forEach((target, targetIndex) => {
         target.y += target.speed;
         target.element.style.top = target.y + 'px';
+        
+        // Check if target hits launcher
+        const dx = Math.abs(target.x - launcherX);
+        const dy = Math.abs(target.y - (window.innerHeight - 60));
+        if (dx < 30 && dy < 20) {
+            createExplosion(target.x, target.y);
+            gameOver();
+            return;
+        }
         
         // Check collision with missiles
         missiles.forEach((missile, missileIndex) => {
