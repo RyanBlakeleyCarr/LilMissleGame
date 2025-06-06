@@ -89,6 +89,20 @@
             font-size: 24px;
             text-shadow: 0 0 10px #44ff44;
         }
+        #lives {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            color: white;
+            font-family: Arial, sans-serif;
+            font-size: 24px;
+            text-shadow: 0 0 10px #44ff44;
+        }
+        
+        .life-icon {
+            color: #ff4444;
+            margin-left: 5px;
+        }
         #gameOver {
             display: none;
             position: fixed;
@@ -135,6 +149,7 @@
 <body>
     <div id="game">
         <div id="score">Score: 0</div>
+        <div id="lives">Lives: <span id="lifeCount">5</span> ❤️</div>
         <div id="launcher"></div>
     </div>
     <div id="gameOver">

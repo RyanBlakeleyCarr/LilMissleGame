@@ -1,12 +1,14 @@
 const game = document.getElementById('game');
 const launcher = document.getElementById('launcher');
 const scoreElement = document.getElementById('score');
+const lifeCountElement = document.getElementById('lifeCount');
 
 let launcherX = window.innerWidth / 2;
 const launcherSpeed = 12;
 let missiles = [];
 let targets = [];
 let score = 0;
+let lives = 5;
 
 // Game state
 let keys = {
@@ -81,10 +83,31 @@ function gameOver() {
     finalScoreDisplay.textContent = `Final Score: ${score}`;
 }
 
+function loseLife() {
+    lives--;
+    lifeCountElement.textContent = lives;
+    
+    if (lives <= 0) {
+        gameOver();
+    } else {
+        // Reset launcher position after getting hit
+        launcherX = window.innerWidth / 2;
+        launcher.style.left = launcherX + 'px';
+        
+        // Clear all existing missiles and targets
+        missiles.forEach(missile => game.removeChild(missile.element));
+        targets.forEach(target => game.removeChild(target.element));
+        missiles = [];
+        targets = [];
+    }
+}
+
 function resetGame() {
     isGameOver = false;
     score = 0;
+    lives = 5;
     scoreElement.textContent = 'Score: 0';
+    lifeCountElement.textContent = lives;
     gameOverScreen.style.display = 'none';
     
     // Clear all existing missiles and targets
@@ -145,7 +168,7 @@ function updateGame() {
         const dy = Math.abs(target.y - (window.innerHeight - 60));
         if (dx < 30 && dy < 20) {
             createExplosion(target.x, target.y);
-            gameOver();
+            loseLife();
             return;
         }
         
